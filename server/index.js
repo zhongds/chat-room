@@ -16,25 +16,25 @@ server.listen(port, function() {
 
 let numUsers = 0;
 
-io.on('connection', function(socket){
-  socket.on('new message', function (content) {
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
-  })
-  socket.on('add user', function (username) {
-    // we store the username in the socket session for this client
-    socket.username = username;
-    ++numUsers;
-    addedUser = true;
-    socket.emit('login', {
-      numUsers: numUsers
-    });
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
-    });
-  })
-});
+// io.on('connection', function(socket){
+//   socket.on('new message', function (content) {
+//     socket.broadcast.emit('new message', {
+//       username: socket.username,
+//       message: data
+//     });
+//   })
+//   socket.on('add user', function (username) {
+//     // we store the username in the socket session for this client
+//     socket.username = username;
+//     ++numUsers;
+//     addedUser = true;
+//     socket.emit('login', {
+//       numUsers: numUsers
+//     });
+//     // echo globally (all clients) that a person has connected
+//     socket.broadcast.emit('user joined', {
+//       username: socket.username,
+//       numUsers: numUsers
+//     });
+//   })
+// });

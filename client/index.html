@@ -5,8 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>聊天室</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div>SSSSSSS</div>
+  <div id="app">
+    <!-- 注册 -->
+    <div id="login">
+      <h1>CHAT ROOM</h1>
+      <h2>Welcome,please set your display name first!</h1>
+      <input class="username" type="text" maxlength="10">
+    </div>
+    <div id="chat" class="none">
+      <div>SSSS</div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/main.js"></script>
 </body>
 </html>
