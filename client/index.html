@@ -10,13 +10,51 @@
 <body>
   <div id="app">
     <!-- 注册 -->
-    <div id="login">
+    <div id="login" class="none">
       <h1>CHAT ROOM</h1>
       <h2>Welcome,please set your display name first!</h1>
       <input class="username" type="text" maxlength="10">
     </div>
-    <div id="chat" class="none">
-      <div>SSSS</div>
+    <div id="home" class="none">
+      <div class="header">欢迎您，<span id='displayName'>111</span></div>
+      <div class="content">
+        <div class="channel">
+          <div class="title">娱乐频道</div>
+          <div>
+            <span class="room" name="sing">歌唱室</span>
+            <span class="room" name="tea">茶艺室</span>
+            <span class="room" name="yoga">瑜伽室</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="title">体育频道</div>
+          <div>
+            <span class="room" name="basketball">篮球室</span>
+            <span class="room" name="football">足球室</span>
+            <span class="room" name="badminton">羽毛球室</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="title">游戏频道</div>
+          <div>
+            <span class="room" name="lol">LOL</span>
+            <span class="room" name='eat-chicken'>绝地求生</span>
+            <span class="room" name="king-of-Glory">王者荣耀</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="chat-room">
+      <div class="header">
+        <span class="left" id="goback">返回</span>
+        <span>test room(<span id="sum"></span>)</span>
+        <span class="right" id="detail">详情</span>
+      </div>
+      <!-- 聊天内容：对话，进入房间提示和离开房间提示 -->
+      <div class="chat-content"></div>
+      <div class="bottom">
+        <input type="text" name="text-input" id="text-input">
+      </div>
     </div>
   </div>
 

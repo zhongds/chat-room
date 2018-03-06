@@ -33,3 +33,57 @@ html, body {
 .none {
   display: none !important;
 }
+
+.header {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #eae7e7;
+}
+
+.channel {
+  padding: 10px;
+}
+
+.title {
+  padding: 10px 0;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.room {
+  margin: 15px;
+  color: #00BCD4;
+  cursor: pointer;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+.chat-content {
+  height: 100%;
+  overflow: auto;
+}
+
+.bottom {
+  height: 30px;
+  position: fixed;
+  bottom: 0;
+  width: 100%
+}
+
+#text-input {
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+  border: 0;
+  border-top: 1px solid #eae7e7;
+}
+
+#goback {
+  cursor: pointer;
+}
