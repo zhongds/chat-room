@@ -4,6 +4,12 @@ html, body {
   margin: 0;
 }
 
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   height: 100%;
 }
@@ -86,4 +92,27 @@ html, body {
 
 #goback {
   cursor: pointer;
+}
+
+.row {
+  overflow: hidden;
+  padding: 5px 0;
+}
+
+.username {
+  font-weight: bold;
+  font-size: 16px;
+  color: #4CAF50;
+  width: calc(20% - 20px);
+  float: left;
+  padding: 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.messageBody {
+  white-space: normal;
+  word-wrap: break-word;
+  width: 80%;
+  float: right;
 }
