@@ -11,25 +11,30 @@ var chatRoomInput = document.getElementById('text-input');
 var gobackEl = document.getElementById('goback');
 var detailEl = document.getElementById('detail');
 var chatContentEl = document.getElementsByClassName('chat-content')[0];
+var roomNameEl = document.getElementById('roomName');
 
 usernameEl.focus();
-
-gobackEl.addEventListener('click', function(event) {
-  showHomePage();
-})
 
 var username;
 var socket;
 
-// usernameEl.addEventListener('keydown', function(event) {
-//   if(event.keyCode === 13) {
-//     username = usernameEl.value.trim();
-//     if(username) {
-//       showHomePage();
-//       displayNameEl.innerHTML = username;
-//     }
-//   }
-// })
+usernameEl.addEventListener('keydown', function(event) {
+  if(event.keyCode === 13) {
+    username = usernameEl.value.trim();
+    if(username) {
+      showHomePage();
+      displayNameEl.innerHTML = username;
+    }
+  }
+})
+
+gobackEl.addEventListener('click', function(event) {
+  if(socket) {
+    socket.close();
+    socket = null;
+  }
+  showHomePage();
+})
 
 chatRoomInput.addEventListener('keydown', function(event) {
   event.stopPropagation();
@@ -38,7 +43,12 @@ chatRoomInput.addEventListener('keydown', function(event) {
     var content = chatRoomInput.value.trim();
     if(content) {
       //跟后台交互，让它广播
+      showChatContent({
+        username,
+        message: content,
+      })
       socket.emit('new message', content);
+      chatRoomInput.value = "";
     }
   }
 })
@@ -49,12 +59,14 @@ homeEl.addEventListener('click', function(event) {
   if(targetEl.tagName === 'SPAN') {
     var namespace = targetEl.getAttribute('type');
     var roomName = targetEl.getAttribute('name');
+    roomNameEl.innerText = targetEl.innerText;
     // 建立指定的socket连接，
-    request(`/join-chat?namespace=${namespace}&room=${roomName}`).then(function (data) {
+    request(`/join-chat?namespace=${namespace}&room=${roomName}&username=${username}`).then(function (data) {
       console.log('result', data);
-      socket = io('/' + namespace);
+      socket = io(`/${namespace}`);
       registerSocketEvents();
       showChatRoom();
+      showTip(`${username} have been join chat room`);
     }).catch(error => {
       console.log('error', error);
     })
@@ -68,10 +80,12 @@ function registerSocketEvents() {
     showChatContent(data);
   });
 
-
-
   socket.on('disconnect', function () {
-    console.log('you have been disconnected');
+    showTip(`${username} have been remove chat room`);
+  });
+
+  socket.on('reconnect', () => {
+    showTip(`${username} have been reconnected`);
   });
 }
 
@@ -107,6 +121,14 @@ function showChatContent(data) {
   spanEl2.classList.add('messageBody');
   spanEl2.innerText = data.message;
   liEl.appendChild(spanEl2);
+  chatContentEl.appendChild(liEl);
+}
+
+function showTip(content) {
+  var liEl = document.createElement('li');
+  liEl.classList.add('row');
+  liEl.classList.add('tip');
+  liEl.innerText = content;
   chatContentEl.appendChild(liEl);
 }
 

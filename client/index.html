@@ -10,7 +10,7 @@
 <body>
   <div id="app">
     <!-- 注册 -->
-    <div id="login" class="none">
+    <div id="login" class="">
       <h1>CHAT ROOM</h1>
       <h2>Welcome,please set your display name first!</h1>
       <input id="username" type="text" maxlength="10">
@@ -44,10 +44,10 @@
         </div>
       </div>
     </div>
-    <div id="chat-room">
+    <div id="chat-room" class="none">
       <div class="header">
         <span class="left" id="goback">返回</span>
-        <span>test room(<span id="sum"></span>)</span>
+        <span><span id="roomName"></span>(<span id="sum"></span>)</span>
         <span class="right" id="detail">详情</span>
       </div>
       <!-- 聊天内容：对话，进入房间提示和离开房间提示 -->

@@ -7,13 +7,18 @@ const serve = require('koa-static');
 const Router = require('koa-router');
 const router = new Router();
 
+
+const namespaces = [];
 router.get('/login', (ctx, next) => {
   console.log('login ctx', ctx);
 }).get('/join-chat', (ctx, next) => {
   console.log('参数', ctx);
-  const { namespace, room } = ctx.query;
-  const chat = io.of(ctx.query.namespace);
-  registerSocketEvents(chat, room);
+  const { namespace, room, username } = ctx.query;
+  if(namespaces.indexOf(namespace) === -1) {
+    const chat = io.of(`/${namespace}`);
+    registerSocketEvents(chat, room, username);
+    namespaces.push(namespace);
+  }
   ctx.body = 'success';
 }).get('/', (ctx, next) => {
   console.log('root router', ctx);
@@ -32,14 +37,16 @@ server.listen(port, function() {
 
 let numUsers = 0;
 
-function registerSocketEvents(chat, room) {
+function registerSocketEvents(chat, room, username) {
   chat.on('connection', function(socket){
+    socket.username = username;
     socket.on('new message', function (data) {
-      socket.emit('new message', {
-        username: '31231',
+      socket.broadcast.emit('new message', {
+        username,
         message: data
       });
     })
+
     socket.on('add user', function (username) {
       // we store the username in the socket session for this client
       socket.username = username;

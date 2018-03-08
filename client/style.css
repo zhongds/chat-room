@@ -23,7 +23,12 @@ ul, li {
   background: #000;
   color: #fff;
 }
+
+#login h2 {
+  text-align: center;
+}
 #login input {
+  width: 80%;
   height: 40px;
   font-size: 40px;
   margin-top: 10px;
@@ -115,4 +120,11 @@ ul, li {
   word-wrap: break-word;
   width: 80%;
   float: right;
+}
+
+.tip {
+  text-align: center;
+  width: 80%;
+  margin: 0 auto;
+  color: #ccc;
 }
