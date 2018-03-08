@@ -12,6 +12,7 @@ var gobackEl = document.getElementById('goback');
 var detailEl = document.getElementById('detail');
 var chatContentEl = document.getElementsByClassName('chat-content')[0];
 var roomNameEl = document.getElementById('roomName');
+var numUsersEl = document.getElementById('numUsers');
 
 usernameEl.focus();
 
@@ -61,12 +62,16 @@ homeEl.addEventListener('click', function(event) {
     var roomName = targetEl.getAttribute('name');
     roomNameEl.innerText = targetEl.innerText;
     // 建立指定的socket连接，
-    request(`/join-chat?namespace=${namespace}&room=${roomName}&username=${username}`).then(function (data) {
+    request(`/join-chat?namespace=${namespace}`).then(function (data) {
       console.log('result', data);
       socket = io(`/${namespace}`);
       registerSocketEvents();
       showChatRoom();
-      showTip(`${username} have been join chat room`);
+      // 加入房间
+      socket.emit('join room', {
+        username,
+        roomName,
+      })
     }).catch(error => {
       console.log('error', error);
     })
@@ -79,6 +84,16 @@ function registerSocketEvents() {
     console.log(data);
     showChatContent(data);
   });
+
+  socket.on('join room', function (data) {
+    showTip(`${data.username} join room`);
+    numUsersEl.innerText = data.numUsers;
+  });
+
+  socket.on('leave room', function (data) {
+    showTip(`${data.username} leave room`);
+    numUsersEl.innerText = data.numUsers;
+  })
 
   socket.on('disconnect', function () {
     showTip(`${username} have been remove chat room`);
