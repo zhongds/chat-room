@@ -16,7 +16,7 @@
       <input id="username" type="text" maxlength="10">
     </div>
     <div id="home" class="none">
-      <div class="header">欢迎您，<span id='displayName'>111</span></div>
+      <div class="header">欢迎您，<span id='displayName'></span></div>
       <div class="content">
         <div class="channel">
           <div class="title">娱乐频道</div>
@@ -51,9 +51,19 @@
         <span class="right" id="detail">详情</span>
       </div>
       <!-- 聊天内容：对话，进入房间提示和离开房间提示 -->
-      <ul class="chat-content"></ul>
+      <ul id="room-chat-content" class="chat-content"></ul>
       <div class="bottom">
         <input type="text" name="text-input" id="text-input">
+      </div>
+    </div>
+    <div id="private-chat" class="none">
+      <div class="header">
+        <span class="left" id="goRoom">返回</span>
+        <span id="chat-user"></span>
+      </div>
+      <ul id="private-chat-content" class="chat-content"></ul>
+      <div class="bottom">
+        <input type="text" name="text-input" id="private-text-input">
       </div>
     </div>
   </div>

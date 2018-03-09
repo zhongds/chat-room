@@ -10,9 +10,15 @@ var chatRoomHeader = document.querySelector('#chat-room .header');
 var chatRoomInput = document.getElementById('text-input');
 var gobackEl = document.getElementById('goback');
 var detailEl = document.getElementById('detail');
-var chatContentEl = document.getElementsByClassName('chat-content')[0];
+var roomChatContentEl = document.getElementById('room-chat-content');
 var roomNameEl = document.getElementById('roomName');
 var numUsersEl = document.getElementById('numUsers');
+// 私人聊天
+var privateChatEl = document.getElementById('private-chat');
+var chatUserEl = document.getElementById('chat-user');
+var goRoomEL = document.getElementById('goRoom');
+var privateChatContentEl = document.getElementById('private-chat-content');
+var privateChatInput = document.getElementById('private-text-input');
 
 usernameEl.focus();
 
@@ -38,10 +44,22 @@ gobackEl.addEventListener('click', function(event) {
   showHomePage();
 })
 
+goRoomEL.addEventListener('click', function(event) {
+  showChatRoom();
+})
+
+roomChatContentEl.addEventListener('click', function (event) {
+  var targetEl = event.target;
+  if(targetEl.tagName === 'SPAN' && targetEl.classList.contains('username') 
+    && targetEl.innerText !== username) {
+    showPrivateChat();
+    chatUserEl.innerText = targetEl.innerText;
+  }
+})
+
 chatRoomInput.addEventListener('keydown', function(event) {
   event.stopPropagation();
   if(event.keyCode === 13) {
-    console.log('keydown');
     var content = chatRoomInput.value.trim();
     if(content) {
       //跟后台交互，让它广播
@@ -51,6 +69,26 @@ chatRoomInput.addEventListener('keydown', function(event) {
       })
       socket.emit('new message', content);
       chatRoomInput.value = "";
+    }
+  }
+})
+
+privateChatInput.addEventListener('keydown', function(event) {
+  event.stopPropagation();
+  if(event.keyCode === 13) {
+    var content = privateChatInput.value.trim();
+    if(content) {
+      //跟后台交互，让它广播
+      showChatContent({
+        username,
+        message: content,
+        isPrivate: true,
+      })
+      socket.emit('new private message', {
+        id: socket.id,
+        message: content,
+      });
+      privateChatInput.value = "";
     }
   }
 })
@@ -80,9 +118,11 @@ homeEl.addEventListener('click', function(event) {
 })
 
 function registerSocketEvents() {
+  socket.on('new private message', function (data) {
+    showChatContent(data);
+  });
+
   socket.on('new message', function (data) {
-    console.log('new message=========');
-    console.log(data);
     showChatContent(data);
   });
 
@@ -111,18 +151,28 @@ function showLoginPage() {
   loginEl.classList.remove('none');
   chatRoomEl.classList.add('none');
   homeEl.classList.add('none');
+  privateChatEl.classList.add('none');
 }
 
 function showHomePage() {
   loginEl.classList.add('none');
   chatRoomEl.classList.add('none');
   homeEl.classList.remove('none');
+  privateChatEl.classList.add('none');
 }
 
 function showChatRoom() {
   loginEl.classList.add('none');
   chatRoomEl.classList.remove('none');
   homeEl.classList.add('none');
+  privateChatEl.classList.add('none');
+}
+
+function showPrivateChat() {
+  loginEl.classList.add('none');
+  chatRoomEl.classList.add('none');
+  homeEl.classList.add('none');
+  privateChatEl.classList.remove('none');
 }
 
 function showChatContent(data) {
@@ -137,11 +187,15 @@ function showChatContent(data) {
   spanEl2.classList.add('messageBody');
   spanEl2.innerText = data.message;
   liEl.appendChild(spanEl2);
-  chatContentEl.appendChild(liEl);
+  if(data.isPrivate) {
+    privateChatContentEl.appendChild(liEl);
+  } else {
+    roomChatContentEl.appendChild(liEl);    
+  }
 }
 
 function clearChatContent() {
-  chatContentEl.innerHTML = '';
+  roomChatContentEl.innerHTML = '';
 }
 
 function showTip(content) {
@@ -149,7 +203,7 @@ function showTip(content) {
   liEl.classList.add('row');
   liEl.classList.add('tip');
   liEl.innerText = content;
-  chatContentEl.appendChild(liEl);
+  roomChatContentEl.appendChild(liEl);
 }
 
 /** helper functions end */

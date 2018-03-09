@@ -67,6 +67,13 @@ function registerSocketEvents(chat) {
       });
     })
 
+    socket.on('new private message', function (data) {
+      socket.to(data.id).emit('new message', {
+        username: socket.username,
+        message: data.message,
+      });
+    })
+
     socket.on('disconnect', function() {
       socket.leave(socket.room, function () {
         console.log(`${socket.username} leave ${socket.room}`);
