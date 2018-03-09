@@ -34,6 +34,7 @@ gobackEl.addEventListener('click', function(event) {
     socket.close();
     socket = null;
   }
+  clearChatContent();
   showHomePage();
 })
 
@@ -137,6 +138,10 @@ function showChatContent(data) {
   spanEl2.innerText = data.message;
   liEl.appendChild(spanEl2);
   chatContentEl.appendChild(liEl);
+}
+
+function clearChatContent() {
+  chatContentEl.innerHTML = '';
 }
 
 function showTip(content) {

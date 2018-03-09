@@ -35,7 +35,8 @@ server.listen(port, function() {
   console.log(`Server is listening on ${port}`);
 });
 
-let numUsers = 0;
+// key: roomName, value: numUsers
+const roomMap = {};
 
 function registerSocketEvents(chat) {
   chat.on('connection', function(socket){
@@ -44,13 +45,15 @@ function registerSocketEvents(chat) {
         // we store the username in the socket session for this client
         socket.username = data.username;
         socket.room = data.roomName;
-        ++numUsers;
+        roomMap[socket.room] ? ++roomMap[socket.room] : roomMap[socket.room] = 1;
         // echo globally (all clients) that a person has connected
+        // 房间内所有人都能收到信息，包括自己
         chat.to(data.roomName).emit('join room', {
           username: socket.username,
-          numUsers,
+          numUsers: roomMap[socket.room],
         })
-        // socket.broadcast.emit('join room', {
+        // 房间内所有人都能收到信息，除了自己
+        // socket.broadcast.to(data.roomName).emit('join room', {
         //   username: socket.username,
         //   numUsers: numUsers
         // });
@@ -68,10 +71,10 @@ function registerSocketEvents(chat) {
       socket.leave(socket.room, function () {
         console.log(`${socket.username} leave ${socket.room}`);
         // chat.sockets.in(roomid).emit('system','hello,'+data+'加入了房间');//包括自己
-        --numUsers;
+        --roomMap[socket.room];
         chat.to(socket.room).emit('leave room', {
           username: socket.username,
-          numUsers,
+          numUsers: roomMap[socket.room],
         });
       })
     });
